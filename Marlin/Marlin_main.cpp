@@ -2271,6 +2271,7 @@ static void clean_up_after_endstop_or_probe_move() {
   // Do a single Z probe and return with current_position[Z_AXIS]
   // at the height where the probe triggered.
   static float run_z_probe() {
+    millis_t stab_time = millis() + SGBS_STAB_TIME;
 
     #if ENABLED(DEBUG_LEVELING_FEATURE)
       if (DEBUGGING(LEVELING)) DEBUG_POS(">>> run_z_probe", current_position);
@@ -2278,6 +2279,13 @@ static void clean_up_after_endstop_or_probe_move() {
 
     // Prevent stepper_inactive_time from running out and EXTRUDER_RUNOUT_PREVENT from extruding
     refresh_cmd_timeout();
+
+    #if ENABLED(SGBS_PROBE)
+      do {
+        idle();
+      } while (PENDING(millis(), stab_time));
+    #endif
+    
 
     #if ENABLED(PROBE_DOUBLE_TOUCH)
 

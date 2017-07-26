@@ -546,6 +546,17 @@ static_assert(1 >= 0
   #endif
 
   /**
+   * SGBS_PROBE requirements
+   */
+  #if ENABLED(SGBS_PROBE)
+    #ifndef SGBS_STAB_TIME
+      #error "Deformation after moves needs a small time to stabilize."
+    #elif DISABLED(FIX_MOUNTED_PROBE)
+      #error "SGBS is configured like a FIX_MOUNTED_PROBE with offset 0,0 ."
+    #endif
+  #endif
+
+  /**
    * NUM_SERVOS is required for a Z servo probe
    */
   #if HAS_Z_SERVO_ENDSTOP
