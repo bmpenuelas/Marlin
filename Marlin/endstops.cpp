@@ -39,6 +39,7 @@ Endstops endstops;
 // public:
 
 bool Endstops::enabled, Endstops::enabled_globally; // Initialized by settings.load()
+bool Endstops::probing = 0;
 volatile char Endstops::endstop_hit_bits; // use X_MIN, Y_MIN, Z_MIN and Z_MIN_PROBE as BIT value
 
 #if ENABLED(Z_DUAL_ENDSTOPS)
@@ -405,7 +406,13 @@ void Endstops::update() {
           #if ENABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
             if (z_probe_enabled) UPDATE_ENDSTOP(Z, MIN);
           #else
-            UPDATE_ENDSTOP(Z, MIN);
+            #if ENABLED(IGNORE_Z_ENDSTOP_WHILE_PROBING)
+              if ( !probing ) {
+                UPDATE_ENDSTOP(Z, MIN);
+              }
+            #else
+              UPDATE_ENDSTOP(Z, MIN);
+            #endif
           #endif
 
         #endif // !Z_DUAL_ENDSTOPS

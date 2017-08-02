@@ -2271,7 +2271,10 @@ static void clean_up_after_endstop_or_probe_move() {
   // Do a single Z probe and return with current_position[Z_AXIS]
   // at the height where the probe triggered.
   static float run_z_probe() {
-    millis_t stab_time = millis() + SGBS_STAB_TIME;
+    #if ENABLED(SGBS_PROBE)
+      millis_t stab_time = millis() + SGBS_STAB_TIME;
+      endstops.is_probing();
+    #endif
 
     #if ENABLED(DEBUG_LEVELING_FEATURE)
       if (DEBUGGING(LEVELING)) DEBUG_POS(">>> run_z_probe", current_position);
@@ -2329,6 +2332,10 @@ static void clean_up_after_endstop_or_probe_move() {
         SERIAL_ECHOPAIR("2nd Probe Z:", current_position[Z_AXIS]);
         SERIAL_ECHOLNPAIR(" Discrepancy:", first_probe_z - current_position[Z_AXIS]);
       }
+    #endif
+
+    #if ENABLED(SGBS_PROBE)
+      endstops.is_not_probing();
     #endif
     return RAW_CURRENT_POSITION(Z) + zprobe_zoffset
       #if ENABLED(DELTA)

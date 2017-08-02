@@ -34,6 +34,7 @@ class Endstops {
   public:
 
     static bool enabled, enabled_globally;
+    static bool probing;
     static volatile char endstop_hit_bits; // use X_MIN, Y_MIN, Z_MIN and Z_MIN_PROBE as BIT value
 
     #if ENABLED(Z_DUAL_ENDSTOPS)
@@ -76,6 +77,12 @@ class Endstops {
 
     // Clear endstops (i.e., they were hit intentionally) to suppress the report
     static void hit_on_purpose() { endstop_hit_bits = 0; }
+
+    #if ENABLED(IGNORE_Z_ENDSTOP_WHILE_PROBING)
+      // During probing moves, check a different set of switches.
+      static void is_probing() { probing = true; }
+      static void is_not_probing() { probing = false; }
+    #endif
 
     // Enable / disable endstop z-probe checking
     #if HAS_BED_PROBE
