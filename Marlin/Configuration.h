@@ -890,8 +890,8 @@
 // @section machine
 
 // The size of the print bed
-#define X_BED_SIZE 385
-#define Y_BED_SIZE 155
+#define X_BED_SIZE 386
+#define Y_BED_SIZE 156
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
@@ -1031,8 +1031,8 @@
 #if ENABLED(AUTO_BED_LEVELING_LINEAR) || ENABLED(AUTO_BED_LEVELING_BILINEAR)
 
   // Set the number of grid points per dimension.
-  #define GRID_MAX_POINTS_X 3
-  #define GRID_MAX_POINTS_Y 2*GRID_MAX_POINTS_X
+  #define GRID_MAX_POINTS_X 6
+  #define GRID_MAX_POINTS_Y 3
 
   // Set the boundaries for probing (where the probe can reach).
   #define LEFT_PROBE_BED_POSITION MIN_PROBE_EDGE
